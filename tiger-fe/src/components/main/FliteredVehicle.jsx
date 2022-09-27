@@ -3,15 +3,17 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { __isLike } from "../../redux/modules/likeSlice";
+import styled from "styled-components";
+import FilteredMap from "./FilteredMap";
+
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Pagination, Navigation } from "swiper";
+import like from "../../assets/Love.png";
+import liked from "../../assets/liked.png";
 import "swiper/scss";
 import "swiper/scss/navigation";
 import "swiper/scss/pagination";
-import { Swiper, SwiperSlide } from "swiper/react";
-import { Pagination, Navigation } from "swiper";
-import { __isLike } from "../../redux/modules/likeSlice";
-import like from "../../assets/Love.png";
-import liked from "../../assets/liked.png";
-import styled from "styled-components";
 
 const FliteredVehicle = ({ list }) => {
   const email = localStorage.getItem("email");
@@ -34,53 +36,58 @@ const FliteredVehicle = ({ list }) => {
 
   return (
     <StItem>
-      <StSwiper
-        pagination={{
-          type: "fraction",
-          clickable: true,
-        }}
-        navigation={true}
-        loop={true}
-        modules={[Pagination, Navigation]}
-        className="mySwiper">
-        <SwiperSlide className="img">
-          <img src={list.thumbnail} alt="imageSlide" />
-        </SwiperSlide>
-      </StSwiper>
-      {email ? (
-        isLike === true ? (
-          <span className="heart" onClick={likeClickHandler}>
-            <img src={liked} alt="liked" />
-          </span>
+      <StItemLeft>
+        <StSwiper
+          pagination={{
+            type: "fraction",
+            clickable: true,
+          }}
+          navigation={true}
+          loop={true}
+          modules={[Pagination, Navigation]}
+          className="mySwiper">
+          <SwiperSlide className="img">
+            <img src={list.thumbnail} alt="imageSlide" />
+          </SwiperSlide>
+        </StSwiper>
+        {email ? (
+          isLike === true ? (
+            <span className="heart" onClick={likeClickHandler}>
+              <img src={liked} alt="liked" />
+            </span>
+          ) : (
+            <span className="heart" onClick={likeClickHandler}>
+              <img src={like} alt="liked" />
+            </span>
+          )
         ) : (
-          <span className="heart" onClick={likeClickHandler}>
-            <img src={like} alt="liked" />
-          </span>
-        )
-      ) : (
-        <span className="heart" style={{ display: "none" }}></span>
-      )}
-      <div
-        className="desc__box"
-        onClick={() => {
-          navigate(
-            `/vdetail/${list.vid}?startDate=${list.startDate}&endDate=${list.endDate}`
-          );
-        }}>
-        <div className="desc__top">
-          <div className="desc__title">{list.location}</div>
-          <div className="desc__star">4.12</div>
+          <span className="heart" style={{ display: "none" }}></span>
+        )}
+        <div
+          className="desc__box"
+          onClick={() => {
+            navigate(
+              `/vdetail/${list.vid}?startDate=${list.startDate}&endDate=${list.endDate}`
+            );
+          }}>
+          <div className="desc__top">
+            <div className="desc__title">{list.location}</div>
+            <div className="desc__star">4.12</div>
+          </div>
+          <p>
+            {list.vname} / {list.fuelType}
+          </p>
+          <p className="dates">
+            {list.startDate} ~ {list.endDate}
+          </p>
+          <div className="desc__bottom">
+            ₩{list.price} <span>/1일</span>
+          </div>
         </div>
-        <p>
-          {list.vname} / {list.fuelType}
-        </p>
-        <p className="dates">
-          {list.startDate} ~ {list.endDate}
-        </p>
-        <div className="desc__bottom">
-          ₩{list.price} <span>/1일</span>
-        </div>
-      </div>
+      </StItemLeft>
+      <StItemRight>
+        <FilteredMap />
+      </StItemRight>
     </StItem>
   );
 };
@@ -228,5 +235,8 @@ const StSwiper = styled(Swiper)`
     border-radius: 20px;
   }
 `;
+
+const StItemLeft = styled.div``;
+const StItemRight = styled.div``;
 
 export default FliteredVehicle;

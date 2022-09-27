@@ -35,7 +35,7 @@ const FilteredVehicleList = () => {
       locationX &&
       locationY
     ) {
-      console.log("works");
+      // console.log("works");
       dispatch(
         __vehicleSearchList({
           location,
