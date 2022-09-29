@@ -1,6 +1,6 @@
 // eslint-disable-next-line
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import OwnerItem from "./OwnerItem";
 import { useDispatch, useSelector } from "react-redux";
@@ -17,13 +17,12 @@ import ProfitTest from "./accounting/ProfitTest";
 
 const OwnerItemList = ({ category }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const OwnerItemLists = useSelector(
     (state) => state.ownerItemListSlice.OwnerItemList
   );
-  const dispatch = useDispatch();
 
-  // console.log();
   useEffect(() => {
     if (category === "Registration") {
       dispatch(__registeredItemList());

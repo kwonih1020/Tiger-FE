@@ -42,13 +42,14 @@ export const __reservedItemList = createAsyncThunk(
     try {
       const userToken = localStorage.getItem("userToken");
       const refreshToken = localStorage.getItem("refreshToken");
+      const page = payload;
       const headers = {
         "Content-Type": "application/json",
         Authorization: userToken,
         RefreshToken: refreshToken,
       };
       const resp = await axios.get(
-        `${serverApi}/order/owner?status=RESERVED&limit=100&offset=0`,
+        `${serverApi}/order/owner?status=RESERVED&limit=5&offset=${page}`,
         { headers: headers }
       );
       // console.log(resp.data);
@@ -72,7 +73,7 @@ export const __useItemList = createAsyncThunk(
         RefreshToken: refreshToken,
       };
       const resp = await axios.get(
-        `${serverApi}/order/owner?status=USE&limit=100&offset=0`,
+        `${serverApi}/order/owner?status=USE&limit=5&offset=0`,
         { headers: headers }
       );
       // console.log(resp.data);
@@ -96,7 +97,7 @@ export const __returnItemList = createAsyncThunk(
         RefreshToken: refreshToken,
       };
       const resp = await axios.get(
-        `${serverApi}/order/owner?status=RETURN&limit=100&offset=0`,
+        `${serverApi}/order/owner?status=RETURN&limit=5&offset=0`,
         { headers: headers }
       );
       // console.log(resp.data);
@@ -120,7 +121,7 @@ export const __cancleItemList = createAsyncThunk(
         RefreshToken: refreshToken,
       };
       const resp = await axios.get(
-        `${serverApi}/order/owner?status=CANCEL&limit=100&offset=0`,
+        `${serverApi}/order/owner?status=CANCEL&limit=5&offset=0`,
         { headers: headers }
       );
       // console.log(resp.data);
@@ -157,8 +158,8 @@ const ownerItemListSlice = createSlice({
     },
     [__reservedItemList.fulfilled]: (state, action) => {
       state.isLoading = false;
-      // console.log(action.payload);
-      state.OwnerItemList = action.payload;
+      console.log(action.payload);
+      state.OwnerItemList = action.payload.output;
     },
     [__reservedItemList.rejected]: (state, action) => {
       state.isLoading = false;

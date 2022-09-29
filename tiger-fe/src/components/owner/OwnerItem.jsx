@@ -77,7 +77,6 @@ const OwnerItem = ({ list, category, vid }) => {
     <>
       {category === "Registration" ? (
         <StOwnerItem>
-          {/* <div className="thumnail" onClick={onClick}></div> */}
           <img src={list.thumbnail} alt="차량" onClick={onClick} />
           <div className="carInfo" onClick={onClick}>
             <p>
@@ -108,6 +107,14 @@ const OwnerItem = ({ list, category, vid }) => {
         </StOwnerItem>
       ) : category === "Reservation" ? (
         <StOwnerItem>
+          {/* <div className="pagenation_container">
+            <div className="prevPage" onClick={toPrevPage}>
+              이전
+            </div>
+            <div className="nextPage" onClick={toNextPage}>
+              다음
+            </div>
+          </div> */}
           <img src={list.thumbnail} alt="차량" onClick={onClick} />
           <div className="carInfo" onClick={onClick}>
             <p>

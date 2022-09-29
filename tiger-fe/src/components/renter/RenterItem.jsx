@@ -7,7 +7,6 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { __getRenterItemList } from "../../redux/modules/renterItemListSlice";
 import axios from "axios";
 import CommentModal from "./CommentModal";
-// import CommentEditModal from "./CommentEditModal";
 
 const RenterItem = ({ category, list, onSelect }) => {
   const serverApi = process.env.REACT_APP_SERVER;
@@ -22,6 +21,8 @@ const RenterItem = ({ category, list, onSelect }) => {
     (state) => state.renterItemListSlice.renterItemLists
   );
   // console.log(renterItemLists);
+  // const [page, setPage] = useState(0);
+  // const [newItemLists, setNewItemLists] = useState([]);
 
   useEffect(() => {
     if (category === "RESERVED") {
@@ -43,30 +44,6 @@ const RenterItem = ({ category, list, onSelect }) => {
     dispatch(__getRenterItemList("RESERVED"));
   };
 
-  const returnHandler = async (oid) => {
-    // e.stopPropagation();
-    const orderId = oid;
-    try {
-      const userToken = localStorage.getItem("userToken");
-      const refreshToken = localStorage.getItem("refreshToken");
-      const headers = {
-        "Content-Type": "application/json",
-        Authorization: userToken,
-        RefreshToken: refreshToken,
-      };
-      const response = await axios.post(
-        serverApi + `/order/owner/return/${orderId}`,
-        {},
-        {
-          headers: headers,
-        }
-      );
-      console.log("반납하기 성공", response);
-    } catch (error) {
-      console.log("반납하기 실패", error);
-    }
-  };
-
   const [commentModal, setCommentModal] = useState(false);
   const [singleVehicle, setSingleVehicle] = useState({});
 
@@ -74,6 +51,15 @@ const RenterItem = ({ category, list, onSelect }) => {
     setCommentModal(!commentModal);
     setSingleVehicle(list);
   };
+
+  // <div className="pagenation_container">
+  //   <div className="prevPage" onClick={toPrevPage}>
+  //     이전
+  //   </div>
+  //   <div className="nextPage" onClick={toNextPage}>
+  //     다음
+  //   </div>
+  // </div>;
 
   return (
     <div>
@@ -223,78 +209,77 @@ const RenterItem = ({ category, list, onSelect }) => {
             );
           })
         ) : category === "USE" ? (
-          renterItemLists.output &&
-          renterItemLists.output.map((list, i) => {
-            return (
-              <StRenterItem key={i}>
-                <img
-                  src={list.thumbnail}
-                  alt="차량"
-                  onClick={() => {
-                    navigate(`/vdetail/${list.vid}`);
-                  }}
-                />
-                <div
-                  className="carInfo"
-                  onClick={() => {
-                    navigate(`/vdetail/${list.vid}`);
-                  }}>
-                  <p>{list.vbrand}</p>
-                  <p>{list.vname}</p>
-                  <span>{list.oname}</span>
-                  <p>₩{list.price}</p>
-                  <p>{list.location}</p>
-                </div>
-                <div className="flex_wrap">
-                  <div className="item_date">
-                    <div className="what">{list.startDate}</div>
-                    <span>~</span>
-                    <span>{list.endDate}</span>
-                  </div>
-                  <div className="btn_box">
-                    {/* <span
-                      className="return"
+          <>
+            {renterItemLists.output &&
+              renterItemLists.output.map((list, i) => {
+                return (
+                  <StRenterItem key={i}>
+                    <img
+                      src={list.thumbnail}
+                      alt="차량"
                       onClick={() => {
-                        returnHandler(list.oid);
-                      }}>
-                      반납
-                    </span> */}
+                        navigate(`/vdetail/${list.vid}`);
+                      }}
+                    />
                     <div
-                      className="chatButton"
-                      onClick={async () => {
-                        const ownerId = list.ownerId;
-                        console.log(list.ownerId);
-                        try {
-                          const response = await axios.post(
-                            `${chatApi}/chat/room`,
-                            {
-                              ownerId,
-                            },
-                            {
-                              headers: {
-                                "Content-Type": "application/json",
-                                Authorization:
-                                  localStorage.getItem("userToken"),
-                                RefreshToken:
-                                  localStorage.getItem("refreshToken"),
-                              },
-                            }
-                          );
-                          console.log(response);
-                          navigate(`/chat/${response.data}`, {
-                            state: { backgroundLocation: location },
-                          });
-                        } catch (error) {
-                          return error;
-                        }
+                      className="carInfo"
+                      onClick={() => {
+                        navigate(`/vdetail/${list.vid}`);
                       }}>
-                      채팅하기
+                      <p>{list.vbrand}</p>
+                      <p>{list.vname}</p>
+                      <span>{list.oname}</span>
+                      <p>₩{list.price}</p>
+                      <p>{list.location}</p>
                     </div>
-                  </div>
-                </div>
-              </StRenterItem>
-            );
-          })
+                    <div className="flex_wrap">
+                      <div className="item_date">
+                        <div className="what">{list.startDate}</div>
+                        <span>~</span>
+                        <span>{list.endDate}</span>
+                      </div>
+                      <div className="btn_box">
+                        <div
+                          className="chatButton"
+                          onClick={async () => {
+                            const ownerId = list.ownerId;
+                            console.log(list.ownerId);
+                            try {
+                              const response = await axios.post(
+                                `${chatApi}/chat/room`,
+                                {
+                                  ownerId,
+                                },
+                                {
+                                  headers: {
+                                    "Content-Type": "application/json",
+                                    Authorization:
+                                      localStorage.getItem("userToken"),
+                                    RefreshToken:
+                                      localStorage.getItem("refreshToken"),
+                                  },
+                                }
+                              );
+                              console.log(response);
+                              navigate(`/chat/${response.data}`, {
+                                state: { backgroundLocation: location },
+                              });
+                            } catch (error) {
+                              return error;
+                            }
+                          }}>
+                          채팅하기
+                        </div>
+                      </div>
+                    </div>
+                  </StRenterItem>
+                );
+              })}
+            {/* <div className="pagenation_container">
+              <div className="prevPage">이전</div>
+              <div className="nextPage">다음</div>
+            </div> */}
+          </>
         ) : category === "RETURN" ? (
           renterItemLists.output &&
           renterItemLists.output.map((list, i) => {
@@ -334,13 +319,6 @@ const RenterItem = ({ category, list, onSelect }) => {
                         }}>
                         리뷰
                       </div>
-                      {/* <div
-                        className="comments"
-                        onClick={() => {
-                          showCommentEditModal(list);
-                        }}>
-                        수정
-                      </div> */}
                     </div>
                   </div>
                 </StRenterItem>
@@ -350,12 +328,6 @@ const RenterItem = ({ category, list, onSelect }) => {
                     singleVehicle={singleVehicle}
                   />
                 )}
-                {/* {commentEditModal && (
-                  <CommentEditModal
-                    showCommentEditModal={showCommentEditModal}
-                    singleVehicle={singleVehicle}
-                  />
-                )} */}
               </div>
             );
           })
@@ -395,6 +367,20 @@ const StRenterItemList = styled.div`
   width: 790px;
   height: 890px;
   margin-top: 65px;
+  .pagenation_container {
+    display: flex;
+    display: flex;
+    flex-direction: row;
+    width: 55%;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    .prevPage {
+      cursor: pointer;
+    }
+    .nextPage {
+      cursor: pointer;
+    }
+  }
 `;
 
 const StRenterItem = styled.div`

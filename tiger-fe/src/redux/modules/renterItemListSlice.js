@@ -17,8 +17,9 @@ const initialState = {
 export const __getRenterItemList = createAsyncThunk(
   "renter/__getRenterItemList",
   async (payload, thunkAPI) => {
-    // console.log(payload);
-    const status = payload;
+    console.log(payload);
+    const status = payload.category;
+    const page = payload.page;
     // console.log(typeof status);
     const userToken = localStorage.getItem("userToken");
     const refreshToken = localStorage.getItem("refreshToken");
@@ -45,7 +46,7 @@ export const __getRenterItemList = createAsyncThunk(
           RefreshToken: refreshToken,
         };
         const response = await axios.get(
-          serverApi + `/order/renter?status=${status}&limit=100&offset=0`,
+          serverApi + `/order/renter?status=${status}&limit=100&offset=${page}`,
           { headers: headers }
         );
         // console.log(response);
