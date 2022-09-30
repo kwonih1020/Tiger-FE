@@ -1,6 +1,6 @@
 // eslint-disable-next-line
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -15,13 +15,25 @@ const RenterItem = ({ category, list, onSelect }) => {
 
   const location = useLocation();
 
+  const target = useRef(null);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const renterItemLists = useSelector(
     (state) => state.renterItemListSlice.renterItemLists
   );
-  // console.log(renterItemLists);
+  console.log(renterItemLists);
+
+  const [newItemLists, setNewItemLists] = useState([]);
+  const [page, setPage] = useState(0);
+
+  console.log(newItemLists);
+
+  useEffect(() => {
+    setNewItemLists([...newItemLists, ...renterItemLists]);
+    console.log("setNewItemLists");
+  }, [renterItemLists]);
 
   useEffect(() => {
     if (category === "RESERVED") {
@@ -54,11 +66,10 @@ const RenterItem = ({ category, list, onSelect }) => {
   return (
     <div>
       <StRenterItemList>
-        {renterItemLists.output && renterItemLists.output.length === 0 ? (
+        {newItemLists.length === 0 ? (
           <p>예약된 차량이 없습니다.</p>
         ) : category === "RESERVED" ? (
-          renterItemLists.output &&
-          renterItemLists.output.map((list, i) => {
+          newItemLists.map((list, i) => {
             return (
               <StRenterItem key={i}>
                 <img
@@ -343,13 +354,14 @@ const RenterItem = ({ category, list, onSelect }) => {
           })
         ) : null}
       </StRenterItemList>
+      <StObserveContainer ref={target} />
     </div>
   );
 };
 
 const StRenterItemList = styled.div`
   width: 790px;
-  height: 890px;
+  height: auto;
   margin-top: 65px;
 `;
 
@@ -452,6 +464,12 @@ const StRenterItem = styled.div`
       }
     }
   }
+`;
+
+const StObserveContainer = styled.div`
+  width: 1px;
+  height: 1px;
+  position: relative;
 `;
 
 export default RenterItem;

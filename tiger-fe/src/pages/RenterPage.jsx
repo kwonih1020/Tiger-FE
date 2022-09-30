@@ -6,7 +6,6 @@ import RenterNavbar from "../components/renter/RenterNavbar";
 import GlobalLayout from "../global/GlobalLayout";
 import RenterInfo from "../components/renter/RenterInfo";
 import RenterItem from "../components/renter/RenterItem";
-import ChatModal from "../components/chat/ChatModal";
 
 const RenterPage = () => {
   const [category, setCategory] = useState("RESERVED");
@@ -19,7 +18,6 @@ const RenterPage = () => {
       <GlobalLayout>
         <RenterInfo />
         <RenterItem category={category} onSelect={onSelect} />
-        {/* <ChatModal /> */}
       </GlobalLayout>
     </>
   );

@@ -87,31 +87,12 @@ const StNavBar = styled.div`
   box-shadow: 0px 20px 30px rgba(0, 0, 0, 0.06),
     0px 10px 12px rgba(0, 0, 0, 0.0456112),
     0px 12.5216px 10px rgba(0, 0, 0, 0.02);
-  /* background-color: skyblue; */
   padding: 0 246px;
   box-sizing: border-box;
   .wrap {
     display: flex;
     align-items: center;
     height: 100%;
-    /* background-color: pink; */
-    /* .category {
-      font-weight: 600;
-      font-size: 20px;
-      color: #8b8b8b;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      box-sizing: border-box;
-      cursor: pointer;
-      margin-left: 70px;
-      :nth-child(1) {
-        margin: 0;
-      }
-      :hover {
-        color: #585656;
-      }
-    } */
   }
 `;
 
