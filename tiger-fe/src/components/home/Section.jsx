@@ -1,4 +1,6 @@
-import React from "react";
+// eslint-disable-next-line
+
+import React, { useState } from "react";
 import styled from "styled-components";
 
 import logo from "../../assets/home_image/logo_opacity2.png";
@@ -6,12 +8,10 @@ import pin from "../../assets/home_image/MAP.png";
 import calender from "../../assets/home_image/CALENDAR.png";
 import finance from "../../assets/home_image/FINANCE.png";
 
-import Fade from "react-reveal/Fade";
 import LightSpeed from "react-reveal/LightSpeed";
 import Zoom from "react-reveal/Zoom";
 import Flip from "react-reveal/Flip";
 import Swing from "react-reveal/Swing";
-import Reveal from "react-reveal/Reveal";
 
 import toggle from "../../assets/home_image/owner_switch.png";
 import btn from "../../assets/home_image/button.png";
@@ -20,7 +20,18 @@ import form from "../../assets/home_image/inform.png";
 import chart from "../../assets/home_image/image_chart.png";
 import calculate from "../../assets/home_image/image_chart2.png";
 
+import { TiArrowSortedDown } from "react-icons/ti";
+
 const Section = () => {
+  const [open, setOpen] = useState(null);
+
+  const clickOpen = (param) => {
+    if (open === param) {
+      setOpen(null);
+    } else {
+      setOpen(param);
+    }
+  };
   return (
     <StSection>
       <div className="desc">
@@ -70,7 +81,6 @@ const Section = () => {
           <Swing>
             <img src={toggle} alt="토글사진" />
           </Swing>
-          {/* <div className="list_img"></div> */}
         </div>
         <div className="list">
           <span>2.</span>
@@ -85,7 +95,6 @@ const Section = () => {
               <img src={form} alt="폼" />
             </Swing>
           </div>
-          {/* <div className="list_img"></div> */}
         </div>
         <div className="list">
           <span>3.</span>
@@ -110,12 +119,90 @@ const Section = () => {
           style={{
             background:
               "linear-gradient(to bottom, #ffe6d1 10%, #fffbf6, #fff 80%",
-          }}
-        >
+          }}>
           <div className="qna">
-            <Reveal effect="showUp" duration={1500}>
-              <p>자주 묻는 질문 FAQ</p>
-            </Reveal>
+            <h3>자주 묻는 질문 FAQ</h3>
+            <div className="question">
+              <>
+                <div className="qlist">
+                  <div className="left">
+                    <span>Q.</span>
+                    <p>실제로 결제가 가능한 사이트인가요?</p>
+                  </div>
+                  <TiArrowSortedDown
+                    onClick={() => clickOpen("payment")}
+                    className="btn"
+                  />
+                </div>
+                <div className="answer">
+                  {open === "payment" ? (
+                    <>
+                      <p>
+                        A. 아니요, 타,이거 서비스는 항해99 실전프로젝트
+                        포트폴리오용 서비스입니다.
+                      </p>
+                    </>
+                  ) : null}
+                </div>
+              </>
+
+              <>
+                <div className="qlist">
+                  <div className="left">
+                    <span>Q.</span>
+                    <p>차량등록은 몇개까지 가능한가요?</p>
+                  </div>
+                  <TiArrowSortedDown
+                    onClick={() => clickOpen("vehicle")}
+                    className="btn"
+                  />
+                </div>
+                <div className="answer">
+                  {open === "vehicle" ? (
+                    <p>A. 무제한입니다. 원하시는 만큼 등록 가능합니다.</p>
+                  ) : null}
+                </div>
+              </>
+
+              <>
+                <div className="qlist">
+                  <div className="left">
+                    <span>Q.</span>
+                    <p>실제로 차량을 이용할 수 있나요?</p>
+                  </div>
+                  <TiArrowSortedDown
+                    onClick={() => clickOpen("use")}
+                    className="btn"
+                  />
+                </div>
+                <div className="answer">
+                  {open === "use" ? (
+                    <p>
+                      A. 아니요. 개인정보 보호를 위해 랜덤으로 전화번호를
+                      생성하고 있습니다.
+                    </p>
+                  ) : null}
+                </div>
+              </>
+
+              <>
+                <div className="qlist">
+                  <div className="left">
+                    <span>Q.</span>
+                    <p>실제 전화번호를 사용하나요?</p>
+                  </div>
+                  <TiArrowSortedDown
+                    onClick={() => clickOpen("tel")}
+                    className="btn"
+                  />
+                </div>
+                <div className="answer">
+                  {open === "tel" ? (
+                    <p>A. 아니요. 차량은 실제로 이용하지 못합니다.</p>
+                  ) : null}
+                </div>
+              </>
+            </div>
           </div>
         </div>
       </div>
@@ -128,7 +215,6 @@ export default Section;
 const StSection = styled.div`
   padding-top: 115px;
   width: 100%;
-  /* height: 300vh; */
   .desc {
     width: 100%;
     height: 400px;
@@ -137,7 +223,6 @@ const StSection = styled.div`
     align-items: center;
     justify-content: center;
     position: relative;
-    /* overflow: hidden; */
     .logo {
       display: flex;
       justify-content: center;
@@ -169,7 +254,6 @@ const StSection = styled.div`
     justify-content: space-between;
     padding: 0 130px;
     box-sizing: border-box;
-    /* background-color: pink; */
     .item_box {
       width: 30%;
       height: 440px;
@@ -181,7 +265,6 @@ const StSection = styled.div`
       border-radius: 36px;
       text-align: center;
       position: relative;
-      /* padding: 50px 65px 80px 65px; */
       margin-top: 60px;
       box-sizing: border-box;
       .item_img {
@@ -192,7 +275,6 @@ const StSection = styled.div`
       }
       img {
         margin: 0 auto 65px auto;
-        /* margin: 0 auto 20px auto; */
       }
       p {
         font-weight: 600;
@@ -219,7 +301,6 @@ const StSection = styled.div`
     .list {
       width: 80%;
       height: 222px;
-      /* background-color: pink; */
       margin-bottom: 58px;
       padding: 85px 87px;
       box-sizing: border-box;
@@ -263,34 +344,77 @@ const StSection = styled.div`
   .circle_box {
     margin-top: 200px;
     width: 100%;
-    height: 665px;
     overflow: hidden;
     .circle {
       margin-top: 104px;
       width: 100%;
-      height: 800px;
+      height: 840px;
       position: relative;
       border-radius: 50%;
       transform: scale(1.4);
       margin-top: 160px;
       .qna {
-        /* overflow: hidden; */
+        width: 90%;
+        margin: 0 auto;
         text-align: center;
         position: absolute;
         top: 104px;
         left: 50%;
         height: 60px;
         transform: translateX(-50%);
-        p {
+
+        h3 {
           font-weight: 600;
           font-size: 42px;
           color: #000;
+        }
+        .question {
+          margin-top: 86px;
+          width: 80%;
+          margin: 86px auto 0 auto;
+          font-weight: 500;
+          font-size: 20px;
+          color: #4d4d4d;
+          padding-bottom: 80px;
+          .qlist {
+            width: 80%;
+            margin: 35px auto 0px auto;
+            height: 85px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 2px solid #cccccc;
+            border-radius: 20px;
+            padding: 0 20px;
+            box-sizing: border-box;
+            .left {
+              display: flex;
+              span {
+                margin-right: 10px;
+              }
+            }
+            .btn {
+              cursor: pointer;
+              font-size: 28px;
+            }
+            :nth-last-child() {
+              margin-bottom: 0px;
+            }
+          }
+          .answer {
+            width: 80%;
+            margin: 20px auto;
+            text-align: left;
+            p {
+              padding-left: 23px;
+              line-height: 18px;
+            }
+          }
         }
       }
     }
   }
   @media (min-width: 768px) and (max-width: 1023px) {
-    /* background-color: pink; */
     .desc {
       h3 {
         font-size: 32px;
@@ -305,10 +429,6 @@ const StSection = styled.div`
       align-items: center;
       .item_box {
         width: 100%;
-        img {
-        }
-        p {
-        }
       }
     }
     .list_wrap {
@@ -317,8 +437,6 @@ const StSection = styled.div`
       .list {
         justify-content: flex-start;
         width: 100%;
-        span {
-        }
         p {
           text-align: center;
         }
@@ -331,10 +449,27 @@ const StSection = styled.div`
       }
     }
     .circle_box {
+      margin-top: 0px;
+      overflow: unset;
       .circle {
+        margin-top: 178px;
         .qna {
           p {
+            font-size: 16px;
+          }
+          h3 {
             font-size: 30px;
+          }
+          .question {
+            .qlist {
+              width: 90%;
+            }
+            .answer {
+              width: 90%;
+              p {
+                line-height: 18px;
+              }
+            }
           }
         }
       }
@@ -344,7 +479,6 @@ const StSection = styled.div`
     width: 90%;
     margin: 0 auto;
     padding-top: 0;
-    /* background-color: pink; */
     .desc {
       text-align: center;
       h3 {
@@ -359,8 +493,6 @@ const StSection = styled.div`
       justify-content: center;
       align-items: center;
       padding: 0;
-      /* width: 80%; */
-
       .item_box {
         width: 100%;
         img {
@@ -393,10 +525,27 @@ const StSection = styled.div`
       }
     }
     .circle_box {
+      margin-top: 0px;
+      overflow: unset;
       .circle {
+        margin-top: 178px;
         .qna {
           p {
             font-size: 16px;
+          }
+          h3 {
+            font-size: 30px;
+          }
+          .question {
+            .qlist {
+              width: 100%;
+            }
+            .answer {
+              width: 100%;
+              p {
+                line-height: 18px;
+              }
+            }
           }
         }
       }
