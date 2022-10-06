@@ -1,8 +1,10 @@
 ![header](https://capsule-render.vercel.app/api?type=waving&text=ta,iger&color=auto&height=200&align=center&animation=scaleIn)
 <br>
 # C2C 카 쉐어링 중개 플랫폼 - <a href="https://taiger.kr/">타, 이거</a>
+
 ## 프로젝트 기간
 - 2022.08.26 ~ 2022.10.07
+
 ## 팀구성
 이름 | 깃허브 주소 | 포지션 
 --- | --- | --- 
@@ -13,8 +15,12 @@
 권익현  | https://github.com/kwonih1020 | Front-End
 허지연 | yeooon02@gmail.com | UI/UX 
 
+## 팀 노션 페이지
+<a href="https://www.notion.so/ta-iger-c2c-4b3b2ff06b23444d9c6154a6ae8d638c">노션페이지 바로가기</a>
+
 ## 아키텍쳐
-![서비스 아키텍처](https://user-images.githubusercontent.com/26310384/193829271-8159e1de-0727-4a9f-805b-5aac52cd7aee.png)
+![서비스 아키텍처 (수정본)](https://user-images.githubusercontent.com/26310384/194273279-5e5fd8c8-db24-43c0-959b-16cf517a4f97.png)
+
 
 ## 주요기능 🛠
 <div align=center> 
@@ -74,7 +80,7 @@ Owner 차량 월간/일간 수익지표 기능 🧮
 ![Screen Shot 2022-10-03 at 2 11 03 PM](https://user-images.githubusercontent.com/26310384/194005029-7278bcea-5dca-4206-b11b-faf3ca84cd19.png)
 
 ## 📹 발표영상
-<a href="https://youtu.be/-FgCdGtO14g">영상보기</a>
+<a href="">영상보기</a>
 
 ## 🕹️ 기술적 의사결정
 사용기술 | 기술설명 
@@ -85,6 +91,7 @@ Chart.js | 사용자에게 수익을 한눈에 볼 수 있게끔 데이터를 �
 React-Multidate-Picker | 오너의 편의성을 위해 등록날짜, 예약날짜를 구분하기 위함과 동시에 오너가 한 눈에 볼 수 있게 달력을 사용.
 Kakao Map API &  Daum Postcode API | 두 가지 API를 같이 사용한 이유는 우선 kako map api 성능은 google map 다음으로 빠르다. google map은 대한미국에서 사용하기에 적잘하지 않기 때문에 kakao map 을 사용했고, daum postcode api는 카카오 맵과 호환성이 뛰어나고, 우리 서비스상 필요한 상세주소가 다 담겨져 있어서 사용하기 편했다.
 Intersection Observer | scroll-height로 계산하여 무한스크롤 사용이 가능하지만, Intersection Observer 를 사용하면 이미 설정한 element가 노출이 되었는지 판단하고 감지가 되어서 이 점을 활용하여 무한스크롤을 구현했다. 불필요한 요청을 줄이고 필요할때만 요청이 가게끔 했다. 그리고 debounce & throttle 같이 추가적으로 코드를 안써도 되고, offsetTop으로 layout에 정확한 값을 구하기 위해 Reflow를 하는데, Intersection Observer를 사용하면 매번 Reflow를 할 필요없다.
+browser-image-compression | 이용자들이 고의적으로 많은 양에 고화질 이미지들을 업로드 했을때 s3 비용과 서비스 렌더링 속도에 악 영향을 미칠수 있기에, 프론트쪽에서 이미지 용량을 압축해서 s3로 보내기 위해서 도입 하였습니다.
 
 ## 🔎 Trouble Shooting
 
@@ -112,10 +119,55 @@ Lazy Loading 사용하여 화면에 나타나는 이미지 순으로 렌더링�
 
 ### 이미지 용량 최적화
 
-browser-image-compression 라이브러리를 이용하여 이용자가 사진을 업로드할 때 사진 용량을 압축 시켜서 서버로 보냈다. 기존 사이즈 약 1.3MB, 최적화 후 약 0.3MB : 결과 ⇒약 28%정도 줄였습니다. 완료한 후에 코드 추후 추가하기.결론 20~30%
+##### 도입이유: 고화질 이미지 렌더링 속도 개선
+##### 문제상황: 큰 용량 때문에 S3 비용과 클라이언트 이미지 렌더링 속도 저하
+##### 해결방안: FE: browser-image-compression 패키지 사용BE: imgscalr를 활용한 imageResize
+##### 의견결정: maxSize MB를 1로 지정, (그 이하는 이미지 깨짐 현상 발견)
+##### Base 64
 
-![Untitled](https://user-images.githubusercontent.com/26310384/194003279-1a1492a6-00d0-49b7-b7ea-2a4f044bd5da.png)
+![image (1)](https://user-images.githubusercontent.com/26310384/194281495-a0ed7f1b-06b2-428a-9c38-cd353c2faaec.png)
 
-#### Lighthouse 성능결과
-LightHouse 성능 결과 66점 → 75점
-![lighthouse](https://user-images.githubusercontent.com/26310384/193827536-b1ee5061-4999-4e45-a77b-f691c58e7c1e.png)
+##### Decoding
+
+![image](https://user-images.githubusercontent.com/26310384/194281557-00ba054d-ea26-4e41-b211-0a321ae1a376.png)
+
+
+#### Backend 내부에서 image resize한 후 S3 업로드
+#### imgSclr를 활용한  이미지 리사이즈
+
+#### 원본이미지 정보
+![Screen Shot 2022-10-06 at 4 36 15 PM](https://user-images.githubusercontent.com/26310384/194284429-c2cc3fb4-4953-4fe2-ab6a-eaec73181f72.png)
+
+##### 원본이미지 업로드 후 (사이즈: 326KB)
+![Screen Shot 2022-10-06 at 4 36 44 PM](https://user-images.githubusercontent.com/26310384/194284503-97f7722c-f621-40b8-9b6a-cb882175323d.png)
+
+#### 압축 후 이미지 정보 (사이즈: 198KB)
+![Screen Shot 2022-10-05 at 6 05 38 PM](https://user-images.githubusercontent.com/26310384/194281751-a48308e0-affe-48e6-96b8-d598cc69de47.png)
+
+##### resize 전 이미지 정보 (Dimension: 1024x683px)
+![Screen Shot 2022-10-06 at 4 37 31 PM (1)](https://user-images.githubusercontent.com/26310384/194284745-f8f0578e-6621-4025-be8d-dc8bd23fcd36.png)
+
+##### resize 후 이미지 정보 (Dimension: 800x534px / rezie을 인해 용량도 한번 더 축소가 되었음 => 54.9KB)
+![Screen Shot 2022-10-06 at 4 40 23 PM](https://user-images.githubusercontent.com/26310384/194284898-6dcc62bd-3d28-4f0c-9867-1ae930acf9a7.png)
+
+#### 압축&resize 적용 전 걸리는 로딩시간
+![Screen Shot 2022-10-06 at 4 39 06 PM](https://user-images.githubusercontent.com/26310384/194285139-0d4f047e-a988-407a-b299-6233430eb2f3.png)
+
+#### 압축&resize 적용 후 걸리는 로딩시간
+![Screen Shot 2022-10-06 at 4 39 50 PM](https://user-images.githubusercontent.com/26310384/194285193-6b6495cd-71c7-4467-b583-664c88213ed2.png)
+
+#### 성능향상 수치 정리
+
+--- | Size | Dimensions | 렌더링 속도 
+--- | --- | --- | ---
+원본이미지 | 325KB | 1024*683 | 77.8ms
+프론트 압축 | 198KB | 1024*683 | 
+백엔드 Resize | 54.9KB | 800*534 | 30.1ms 
+최종 감소율 | 83.16% 감소 | ---- | 61.3% 감소
+
+#### Lighthouse 성능결과 => LightHouse 성능 결과 69점 → 80점
+
+![Lighthouse_1](https://user-images.githubusercontent.com/26310384/194272426-f9a998f8-5400-4b61-83d1-93f8c69bc91a.png)
+![Screen Shot 2022-10-06 at 5 55 28 PM](https://user-images.githubusercontent.com/26310384/194272688-b95c02b8-720b-408d-b286-2d8f0bd57c69.png)
+
+
