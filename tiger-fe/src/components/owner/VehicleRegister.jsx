@@ -73,7 +73,6 @@ const VehicleRegister = () => {
 
     const resizing = async () => {
       const files = e.target.files;
-      // let temp = [];
       for (let i = 0; i < files.length; i++) {
         const complessedFile = await getImg(files[i]);
         const reader = new FileReader();
